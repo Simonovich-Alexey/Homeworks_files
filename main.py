@@ -1,50 +1,49 @@
-read_file = []
-with open('recipes.txt', 'r', encoding='utf-8') as file:
-    for i in file:
-        read_file.append(i.strip())
+def read_file():
+    read_file_list = []
+    with open('recipes.txt', 'r', encoding='utf-8') as file:
+        for i in file:
+            read_file_list.append(i.strip())
 
-count = 0
-recipe_list = []
-print(read_file)
-for index in range(len(read_file)):
-    if read_file[index] == '':
-        recipe_list.append(read_file[count:index])
-        print(read_file[count:index])
-        count = index + 1
+    cook_book = {}
+    count = 0
+    for index in range(len(read_file_list)):
+        if read_file_list[index] != '' and index != len(read_file_list) - 1:
+            continue
+        else:
+            if read_file_list[index] == '':
+                recipe_slice = read_file_list[count:index]
+                count = index + 1
+            else:
+                recipe_slice = read_file_list[count:]
 
-    elif index == len(read_file) - 1:
-        recipe_list.append(read_file[count:])
+        name_recipe = recipe_slice[0]
+        ingredients = recipe_slice[2:]
+        recipe = []
+        for j in ingredients:
+            ingredient = j.split(' | ')
+            recipe.append({'ingredient_name': ingredient[0], 'quantity': int(ingredient[1]), 'measure': ingredient[2]})
 
-print(recipe_list)
+        cook_book[name_recipe] = recipe
+    return cook_book
 
-cook_book = {}
+
+def get_shop_list_by_dishes(dishes, person):
+    shop_list = {}
+    for key, values in read_file().items():
+        if key in dishes:
+            for ingredient_one in values:
+                print(ingredient_one)
+                name_ingredient = ingredient_one.setdefault('ingredient_name')
+                measure = ingredient_one.setdefault('measure')
+                product_quantity = ingredient_one.setdefault('quantity') * person
+                if shop_list.get(name_ingredient):
+                    sum_numb = shop_list.setdefault(name_ingredient).setdefault('quantity') + product_quantity
+                    shop_list[name_ingredient] = {'measure': measure,
+                                                  'quantity': sum_numb}
+                else:
+                    shop_list[name_ingredient] = {'measure': measure,
+                                                  'quantity': product_quantity}
+    return shop_list
 
 
-for i in recipe_list:
-    print(i)
-    name_recipe = i[0]
-    ingredients = i[2:]
-    cook_books = []
-    print(name_recipe)
-    for k in ingredients:
-        ingredient = k.split(' | ')
-        ingredients_dict = {'ingredient_name': ingredient[0], 'quantity': ingredient[1], 'measure': ingredient[2]}
-        print(ingredients_dict)
-        cook_books.append(ingredients_dict)
-    cook_book[name_recipe] = cook_books
-    print(cook_book)
-
-print(cook_book)
-# d = recipe_list[0][2]
-# d = d.split(' | ')
-#
-# dict_test = {}
-#
-# dict_test['ingredient_name'] = d[0]
-# dict_test['quantity'] = d[1]
-# dict_test['measure'] = d[2]
-# # print(dict_test)
-#
-# rec_dick = {}
-# for u in recipe_list:
-#     rec_dick[u[0]] = u[1:]
+print(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
