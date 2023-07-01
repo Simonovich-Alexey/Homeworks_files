@@ -32,7 +32,6 @@ def get_shop_list_by_dishes(dishes, person):
     for key, values in read_file().items():
         if key in dishes:
             for ingredient_one in values:
-                print(ingredient_one)
                 name_ingredient = ingredient_one.setdefault('ingredient_name')
                 measure = ingredient_one.setdefault('measure')
                 product_quantity = ingredient_one.setdefault('quantity') * person
@@ -46,4 +45,54 @@ def get_shop_list_by_dishes(dishes, person):
     return shop_list
 
 
+print(read_file())
 print(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
+
+
+# def read_file_in_files(name_file):
+#     if isinstance(name_file, list):
+#         file_list = []
+#         for file_name in name_file:
+#             with open("files/" + file_name, "r", encoding="utf-8") as text_file:
+#                 len_file = 0
+#                 text = []
+#                 for t in text_file:
+#                     len_file += 1
+#                     text.append(t.strip())
+#                 file_dict = {'name': file_name, 'len': len_file, 'text': text}
+#                 file_list.append(file_dict)
+#         return file_list
+#     else:
+#         file_list = []
+#         with open("files/" + name_file, "r", encoding="utf-8") as text_file:
+#             len_file = 0
+#             text = []
+#             for t in text_file:
+#                 len_file += 1
+#                 text.append(t.strip())
+#             file_dict = {'name': name_file, 'len': len_file, 'text': text}
+#             file_list.append(file_dict)
+#         return file_list
+
+
+def read_file_and_sort(*name_file):
+    file_list = []
+    for file_name in name_file:
+        with open("files/" + file_name, "r", encoding="utf-8") as text_file:
+            text = []
+            for t in text_file:
+                text.append(t.strip())
+            file_dict = {'name': file_name, 'len': len(text), 'text': text}
+            file_list.append(file_dict)
+    return sorted(file_list, key=lambda x: x['len'])
+
+
+def write_file(file_read):
+    with open('files/4.txt', 'w', encoding='utf-8') as file:
+        for value in file_read:
+            text_change = '\n'.join(value['text'])
+            added = f"{value['name']}\n{value['len']}\n{text_change}\n"
+            file.write(added)
+
+
+write_file(read_file_and_sort('1.txt', '2.txt', '3.txt'))
