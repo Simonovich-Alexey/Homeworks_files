@@ -1,3 +1,6 @@
+import os
+
+
 def read_file():
     read_file_list = []
     with open('recipes.txt', 'r', encoding='utf-8') as file:
@@ -49,36 +52,10 @@ print(read_file())
 print(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
 
 
-# def read_file_in_files(name_file):
-#     if isinstance(name_file, list):
-#         file_list = []
-#         for file_name in name_file:
-#             with open("files/" + file_name, "r", encoding="utf-8") as text_file:
-#                 len_file = 0
-#                 text = []
-#                 for t in text_file:
-#                     len_file += 1
-#                     text.append(t.strip())
-#                 file_dict = {'name': file_name, 'len': len_file, 'text': text}
-#                 file_list.append(file_dict)
-#         return file_list
-#     else:
-#         file_list = []
-#         with open("files/" + name_file, "r", encoding="utf-8") as text_file:
-#             len_file = 0
-#             text = []
-#             for t in text_file:
-#                 len_file += 1
-#                 text.append(t.strip())
-#             file_dict = {'name': name_file, 'len': len_file, 'text': text}
-#             file_list.append(file_dict)
-#         return file_list
-
-
 def read_file_and_sort(*name_file):
     file_list = []
     for file_name in name_file:
-        with open("files/" + file_name, "r", encoding="utf-8") as text_file:
+        with open(os.path.join(os.getcwd(), 'files', file_name), "r", encoding="utf-8") as text_file:
             text = []
             for t in text_file:
                 text.append(t.strip())
@@ -88,7 +65,7 @@ def read_file_and_sort(*name_file):
 
 
 def write_file(file_read):
-    with open('files/4.txt', 'w', encoding='utf-8') as file:
+    with open(os.path.join(os.getcwd(), 'files', '4.txt'), 'w', encoding='utf-8') as file:
         for value in file_read:
             text_change = '\n'.join(value['text'])
             added = f"{value['name']}\n{value['len']}\n{text_change}\n"
